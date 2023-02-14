@@ -1,5 +1,6 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +12,7 @@ class App extends React.Component {
 
   componentDidMount = () => {
     var uuid = uuidv4();
-    if (this.getCookie("uuid") != undefined) {
+    if (localStorage.getItem("uuid") != undefined) {
       this.setState({
         uuid: this.getCookie("uuid"),
       });
@@ -22,6 +23,7 @@ class App extends React.Component {
         },
         () => {
           document.cookie = "uuid=" + uuid + "; expires=Thu, 18 Dec 2033 12:00:00 UTC";
+          localStorage.setItem("uuid", uuid);
         }
       );
     }
@@ -34,7 +36,7 @@ class App extends React.Component {
     if (parts.length === 2) return parts.pop().split(";").shift();
   };
   render() {
-    return <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: 50 }}>{this.state.uuid}</div>;
+    return <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: 50 }}>localstorage : {this.state.uuid}</div>;
   }
 }
 
