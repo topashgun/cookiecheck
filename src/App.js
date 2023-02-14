@@ -1,18 +1,41 @@
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Cookie Check</p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    this.state = {
+      uuid: uuidv4(),
+    };
+  }
+
+  componentDidMount = () => {
+    var uuid = uuidv4();
+    if (this.getCookie("uuid") != undefined) {
+      this.setState({
+        uuid: this.getCookie("uuid"),
+      });
+    } else {
+      this.setState(
+        {
+          uuid,
+        },
+        () => {
+          document.cookie = "uuid=" + uuid + "; expires=Thu, 18 Dec 2033 12:00:00 UTC";
+        }
+      );
+    }
+
+    console.log(this.getCookie("uuid"));
+  };
+  getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  };
+  render() {
+    return <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: 50 }}>{this.state.uuid}</div>;
+  }
 }
 
 export default App;
